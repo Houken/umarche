@@ -12,7 +12,7 @@ class LifeCycleTestController extends Controller
             return 'ライフサイクルテストをしています。';
         });
 
-        $test = app()->make('lifeCycleTest');
+        $test = app()->make('lifeCycleTest');   // 上でバインドしたサービスを呼び出し
 
         // サービスコンテナ不使用のパターン
         // $message = new Message;             // Sampleクラスのコンストラクタで使用するMessageクラスのインスタンスを生成。
@@ -25,6 +25,16 @@ class LifeCycleTestController extends Controller
         $sample->run();                         // Sampleクラスのコンストラクタで使用されるMessageクラスの生成は自動で行われる。
 
         dd($test, app());
+    }
+
+    public function showServiceProviderTest()
+    {
+        $encrypt = app()->make('encrypter');        // $encryptにサービスencrypterを格納
+        $password = $encrypt->encrypt('password');  // encryptメソッドで文字列passwordを暗号化して$passwordに格納
+
+        $sample = app()->make('serviceProviderTest');   // config/app.phpで登録済のプロバイダが登録したサービスを呼び出し
+
+        dd($sample, $password, $encrypt->decrypt($password));    // $passwordとでCodeしたパスワードを表示
     }
 }
 
