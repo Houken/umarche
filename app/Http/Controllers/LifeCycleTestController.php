@@ -8,6 +8,7 @@ class LifeCycleTestController extends Controller
 {
     public function showServiceContainerTest()
     {
+        // サービスコンテナappにサービスを登録
         app()->bind('lifeCycleTest', function(){
             return 'ライフサイクルテストをしています。';
         });
@@ -21,7 +22,7 @@ class LifeCycleTestController extends Controller
 
         // サービスコンテナ使用のパターン
         app()->bind('sample', Sample::class);   // コンテナsampleにSampleクラスを入れる
-        $sample = app()->make('sample');        // コンテナを指定してサービスを$sampleに格納
+        $sample = app()->make('sample');        // コンテナを指定してサービスを$sampleに格納、すなわちサービスの呼び出し
         $sample->run();                         // Sampleクラスのコンストラクタで使用されるMessageクラスの生成は自動で行われる。
 
         dd($test, app());
@@ -42,6 +43,7 @@ class Sample
 {
     public $message; // プロパティの定義
     public function __construct(Message $message) // 引数でクラスの型付けをすることで、自動的にインスタンス化される。DI
+                                                    //　コンストラクタ インスタンスが生成されるときに実行されるメソッド 
     {
         $this->message = $message; // Messageクラスのインスタンス$messageがこのSampleクラスのプロパティ$messageに格納される
     }
